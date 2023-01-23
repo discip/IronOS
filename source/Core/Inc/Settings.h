@@ -46,14 +46,13 @@ enum SettingsOptions {
   PDMissingWarningCounter        = 29, // Counter of how many times we have warned we cannot detect the pd interface
   UILanguage                     = 30, // Selected UI Language code, null-terminated *only if* the length is less than 8 chars
   PDNegTimeout                   = 31, // PD timeout in 100ms steps
-  OLEDInversion                  = 32, // Invert the colours on the display
-  OLEDBrightness                 = 33, // Brightness for the OLED display
-  LOGOTime                       = 34, // Duration the logo will be displayed for
-  CalibrateCJC                   = 35, // Toggle calibrate CJC at next boot
-  BLEEnabled                     = 36, // Should BLE hardware be enabled if present
+  OLEDBrightness                 = 32, // Brightness for the OLED display
+  LOGOTime                       = 33, // Duration the logo will be displayed for
+  CalibrateCJC                   = 34, // Toggle calibrate CJC at next boot
+  BLEEnabled                     = 35, // Should BLE hardware be enabled if present
 
   //
-  SettingsOptionsLength = 37, //
+  SettingsOptionsLength = 36, //
 };
 
 typedef enum {
