@@ -52,7 +52,6 @@ static void displayDisplayRotation(void);
 static bool setBoostTemp(void);
 static void displayBoostTemp(void);
 static void displayAutomaticStartMode(void);
-static void displayLockingMode(void);
 static void displayCoolingBlinkEnabled(void);
 static bool setResetSettings(void);
 static void displayResetSettings(void);
@@ -105,7 +104,6 @@ static bool enterAdvancedMenu(void);
  *  Auto Start
  *  Temp Change Short Step
  *  Temp Change Long Step
- *  Locking Mode
  *
  * Power Saving
  *  Motion Sensitivity
@@ -187,7 +185,6 @@ const menuitem solderingMenu[] = {
      *  Auto Start
      *  Temp Change Short Step
      *  Temp Change Long Step
-     *  Locking Mode
      */
     {SETTINGS_DESC(SettingsItemIndex::BoostTemperature), setBoostTemp, displayBoostTemp, nullptr, SettingsOptions::SettingsOptionsLength, SettingsItemIndex::BoostTemperature, 5}, /*Boost Temp*/
     {SETTINGS_DESC(SettingsItemIndex::AutoStart), nullptr, displayAutomaticStartMode, nullptr, SettingsOptions::AutoStartMode, SettingsItemIndex::AutoStart, 7},                   /*Auto start*/
@@ -195,7 +192,6 @@ const menuitem solderingMenu[] = {
      6}, /*Temp change short step*/
     {SETTINGS_DESC(SettingsItemIndex::TempChangeLongStep), nullptr, displayTempChangeLongStep, nullptr, SettingsOptions::TempChangeLongStep, SettingsItemIndex::TempChangeLongStep,
      6},                                                                                                                                                    /*Temp change long step*/
-    {SETTINGS_DESC(SettingsItemIndex::LockingMode), nullptr, displayLockingMode, nullptr, SettingsOptions::LockingMode, SettingsItemIndex::LockingMode, 7}, /*Locking Mode*/
     {0, nullptr, nullptr, nullptr, SettingsOptions::SettingsOptionsLength, SettingsItemIndex::NUM_ITEMS, 0}                                                 // end of menu marker. DO NOT REMOVE
 };
 const menuitem PowerSavingMenu[] = {
@@ -435,24 +431,6 @@ static void displayTempChangeShortStep(void) { OLED::printNumber(getSettingValue
 
 static void displayTempChangeLongStep(void) { OLED::printNumber(getSettingValue(SettingsOptions::TempChangeLongStep), 2, FontStyle::LARGE); }
 
-static void displayLockingMode(void) {
-
-  switch (getSettingValue(SettingsOptions::LockingMode)) {
-  case 0:
-    OLED::drawArea(OLED_WIDTH - 16 - 2, 0, 16, 16, UnavailableIcon);
-    break;
-  case 1:
-    OLED::print(translatedString(Tr->SettingLockBoostChar), FontStyle::LARGE);
-    break;
-  case 2:
-    OLED::print(translatedString(Tr->SettingLockFullChar), FontStyle::LARGE);
-    break;
-  default:
-    OLED::drawArea(OLED_WIDTH - 16 - 2, 0, 16, 16, UnavailableIcon);
-    break;
-  }
-}
-
 static void displaySensitivity(void) {
   
   if (getSettingValue(SettingsOptions::Sensitivity)) {
@@ -461,6 +439,7 @@ static void displaySensitivity(void) {
     OLED::drawArea(OLED_WIDTH - 16 - 2, 0, 16, 16, UnavailableIcon);
   }
 }
+
 static bool showSleepOptions(void) { return getSettingValue(SettingsOptions::Sensitivity) > 0; }
 
 #ifndef NO_SLEEP_MODE
