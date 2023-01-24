@@ -118,7 +118,7 @@
             "description": "Yüksek Performans Modu Sıcaklığı"
         },
         "AutoStart": {
-            "displayText": "OTOBAŞ",
+            "displayText": "OTOBAŞ\n",
             "description": "Güç verildiğinde otomatik olarak lehimleme modunda başlat. (L=Lehimleme Modu | U=Uyku Modu | S=Uyku Modu Oda Sıcaklığı)"
         },
         "TempChangeShortStep": {
@@ -134,7 +134,7 @@
             "description": "While soldering, hold down both buttons to toggle locking them (B=boost mode only | F=full locking)"
         },
         "MotionSensitivity": {
-            "displayText": "HARHAS",
+            "displayText": "HARHAS\n",
             "description": "Hareket Hassasiyeti (1=En az duyarlı | ... | 9=En duyarlı)"
         },
         "SleepTemperature": {
