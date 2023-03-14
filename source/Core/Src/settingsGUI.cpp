@@ -373,7 +373,7 @@ static void displayPDNegTimeout(void) {
 
   auto value = getSettingValue(SettingsOptions::PDNegTimeout);
   if (value == 0) {
-    OLED::print(translatedString(Tr->OffString), FontStyle::LARGE);
+    OLED::drawArea(OLED_WIDTH - 16 - 2, 0, 16, 16, UnavailableIcon);
   } else {
     OLED::printNumber(value, 3, FontStyle::LARGE);
   }
@@ -413,7 +413,7 @@ static void displayBoostTemp(void) {
   if (getSettingValue(SettingsOptions::BoostTemp)) {
     OLED::printNumber(getSettingValue(SettingsOptions::BoostTemp), 3, FontStyle::LARGE);
   } else {
-    OLED::print(translatedString(Tr->OffString), FontStyle::LARGE);
+    OLED::drawArea(OLED_WIDTH - 16 - 2, 0, 16, 16, UnavailableIcon);
   }
 }
 
@@ -421,7 +421,7 @@ static void displayAutomaticStartMode(void) {
 
   switch (getSettingValue(SettingsOptions::AutoStartMode)) {
   case 0:
-    OLED::print(translatedString(Tr->SettingStartNoneChar), FontStyle::LARGE);
+    OLED::drawArea(OLED_WIDTH - 16 - 2, 0, 16, 16, UnavailableIcon);
     break;
   case 1:
     OLED::print(translatedString(Tr->SettingStartSolderingChar), FontStyle::LARGE);
@@ -433,7 +433,7 @@ static void displayAutomaticStartMode(void) {
     OLED::print(translatedString(Tr->SettingStartSleepOffChar), FontStyle::LARGE);
     break;
   default:
-    OLED::print(translatedString(Tr->SettingStartNoneChar), FontStyle::LARGE);
+    OLED::drawArea(OLED_WIDTH - 16 - 2, 0, 16, 16, UnavailableIcon);
     break;
   }
 }
@@ -446,7 +446,7 @@ static void displayLockingMode(void) {
 
   switch (getSettingValue(SettingsOptions::LockingMode)) {
   case 0:
-    OLED::print(translatedString(Tr->SettingLockDisableChar), FontStyle::LARGE);
+    OLED::drawArea(OLED_WIDTH - 16 - 2, 0, 16, 16, UnavailableIcon);
     break;
   case 1:
     OLED::print(translatedString(Tr->SettingLockBoostChar), FontStyle::LARGE);
@@ -455,12 +455,19 @@ static void displayLockingMode(void) {
     OLED::print(translatedString(Tr->SettingLockFullChar), FontStyle::LARGE);
     break;
   default:
-    OLED::print(translatedString(Tr->SettingLockDisableChar), FontStyle::LARGE);
+    OLED::drawArea(OLED_WIDTH - 16 - 2, 0, 16, 16, UnavailableIcon);
     break;
   }
 }
 
-static void displaySensitivity(void) { OLED::printNumber(getSettingValue(SettingsOptions::Sensitivity), 1, FontStyle::LARGE, false); }
+static void displaySensitivity(void) {
+  
+  if (getSettingValue(SettingsOptions::Sensitivity)) {
+    OLED::printNumber(getSettingValue(SettingsOptions::Sensitivity), 1, FontStyle::LARGE, false);
+  } else {
+    OLED::drawArea(OLED_WIDTH - 16 - 2, 0, 16, 16, UnavailableIcon);
+  }
+}
 static bool showSleepOptions(void) { return getSettingValue(SettingsOptions::Sensitivity) > 0; }
 
 #ifndef NO_SLEEP_MODE
@@ -488,7 +495,7 @@ static void displaySleepTemp(void) { OLED::printNumber(getSettingValue(SettingsO
 static void displaySleepTime(void) {
 
   if (getSettingValue(SettingsOptions::SleepTime) == 0) {
-    OLED::print(translatedString(Tr->OffString), FontStyle::LARGE);
+    OLED::drawArea(OLED_WIDTH - 16 - 2, 0, 16, 16, UnavailableIcon);
   } else if (getSettingValue(SettingsOptions::SleepTime) < 6) {
     OLED::printNumber(getSettingValue(SettingsOptions::SleepTime) * 10, 2, FontStyle::LARGE);
     OLED::print(LargeSymbolSeconds, FontStyle::LARGE);
@@ -502,7 +509,7 @@ static void displaySleepTime(void) {
 static void displayShutdownTime(void) {
 
   if (getSettingValue(SettingsOptions::ShutdownTime) == 0) {
-    OLED::print(translatedString(Tr->OffString), FontStyle::LARGE);
+    OLED::drawArea(OLED_WIDTH - 16 - 2, 0, 16, 16, UnavailableIcon);
   } else {
     OLED::printNumber(getSettingValue(SettingsOptions::ShutdownTime), 2, FontStyle::LARGE);
     OLED::print(LargeSymbolMinutes, FontStyle::LARGE);
@@ -510,7 +517,14 @@ static void displayShutdownTime(void) {
 }
 
 #ifdef HALL_SENSOR
-static void displayHallEffect(void) { OLED::printNumber(getSettingValue(SettingsOptions::HallEffectSensitivity), 1, FontStyle::LARGE, false); }
+static void displayHallEffect(void) {
+  
+  if (getSettingValue(SettingsOptions::HallEffectSensitivity)) {
+    OLED::printNumber(getSettingValue(SettingsOptions::HallEffectSensitivity), 1, FontStyle::LARGE, false);
+  } else {
+    OLED::drawArea(OLED_WIDTH - 16 - 2, 0, 16, 16, UnavailableIcon);
+  }
+}
 static bool showHallEffect(void) { return getHallSensorFitted(); }
 #endif
 
@@ -606,7 +620,7 @@ static void displayAnimationSpeed(void) {
     OLED::print(translatedString(Tr->SettingFastChar), FontStyle::LARGE);
     break;
   default:
-    OLED::print(translatedString(Tr->SettingOffChar), FontStyle::LARGE);
+    OLED::drawArea(OLED_WIDTH - 16 - 2, 0, 16, 16, UnavailableIcon);
     break;
   }
 }
@@ -631,7 +645,7 @@ static void displayInvertColor(void) {
 static void displayLogoTime(void) {
 
   if (getSettingValue(SettingsOptions::LOGOTime) == 0) {
-    OLED::print(translatedString(Tr->OffString), FontStyle::LARGE);
+    OLED::drawArea(OLED_WIDTH - 16 - 2, 0, 16, 16, UnavailableIcon);
   } else if (getSettingValue(SettingsOptions::LOGOTime) == 5) {
     OLED::drawArea(OLED_WIDTH - 24 - 2, 0, 24, 16, infinityIcon);
   } else {
@@ -649,7 +663,7 @@ static void displayBLEEnabled(void) { OLED::drawCheckbox(getSettingValue(Setting
 static void displayPowerLimit(void) {
 
   if (getSettingValue(SettingsOptions::PowerLimit) == 0) {
-    OLED::print(translatedString(Tr->OffString), FontStyle::LARGE);
+    OLED::drawArea(OLED_WIDTH - 16 - 2, 0, 16, 16, UnavailableIcon);
   } else {
     OLED::printNumber(getSettingValue(SettingsOptions::PowerLimit), 2, FontStyle::LARGE);
     OLED::print(LargeSymbolWatts, FontStyle::LARGE);
@@ -720,7 +734,7 @@ static void displayPowerPulse(void) {
     OLED::print(LargeSymbolDot, FontStyle::LARGE);
     OLED::printNumber(getSettingValue(SettingsOptions::KeepAwakePulse) % 10, 1, FontStyle::LARGE);
   } else {
-    OLED::print(translatedString(Tr->OffString), FontStyle::LARGE);
+    OLED::drawArea(OLED_WIDTH - 16 - 2, 0, 16, 16, UnavailableIcon);
   }
 }
 
