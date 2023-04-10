@@ -49,9 +49,8 @@ enum SettingsOptions {
   OLEDBrightness                 = 32, // Brightness for the OLED display
   LOGOTime                       = 33, // Duration the logo will be displayed for
   CalibrateCJC                   = 34, // Toggle calibrate CJC at next boot
-  BLEEnabled                     = 35, // Should BLE hardware be enabled if present
-  PDVpdoEnabled                  = 36, // Should PPS/EPR be enabled
-
+  BluetoothLE                    = 35, // Should BLE hardware be enabled if present
+  PDVpdo                         = 36, // Should PPS/EPR be enabled
   //
   SettingsOptionsLength = 37, //
 };
