@@ -679,7 +679,7 @@ static bool setCalibrateVIN(void) {
   OLED::clearScreen();
 
   for (;;) {
-    OLED::setCursor(27, 0);
+    OLED::setCursor(35, 0);
     uint16_t voltage = getInputVoltageX10(getSettingValue(SettingsOptions::VoltageDiv), 0);
     OLED::printNumber(voltage / 10, 2, FontStyle::LARGE);
     OLED::print(LargeSymbolDot, FontStyle::LARGE);
@@ -687,7 +687,7 @@ static bool setCalibrateVIN(void) {
     OLED::print(LargeSymbolVolts, FontStyle::LARGE);
     
     OLED::setCursor(0, 8);
-    OLED::printNumber(getSettingValue(SettingsOptions::VoltageDiv), 2, FontStyle::SMALL);
+    OLED::printNumber(getSettingValue(SettingsOptions::VoltageDiv), 3, FontStyle::SMALL);
 
     switch (getButtonState()) {
     case BUTTON_F_SHORT:
