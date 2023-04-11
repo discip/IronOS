@@ -691,18 +691,18 @@ static bool setCalibrateVIN(void) {
 
     switch (getButtonState()) {
     case BUTTON_F_SHORT:
-      nextSettingValue(SettingsOptions::VoltageDiv);
+      prevSettingValue(SettingsOptions::VoltageDiv);
       break;
     case BUTTON_B_SHORT:
-      prevSettingValue(SettingsOptions::VoltageDiv);
+      nextSettingValue(SettingsOptions::VoltageDiv);
       break;
     case BUTTON_BOTH:
     case BUTTON_F_LONG:
     case BUTTON_B_LONG:
       saveSettings();
       OLED::clearScreen();
-      OLED::setCursor(40, 0);
-      OLED::printNumber(getSettingValue(SettingsOptions::VoltageDiv), 3, FontStyle::LARGE);
+//      OLED::setCursor(40, 0);
+//      OLED::printNumber(getSettingValue(SettingsOptions::VoltageDiv), 3, FontStyle::LARGE);
       OLED::refresh();
       waitForButtonPressOrTimeout(1 * TICKS_SECOND);
       return false;
