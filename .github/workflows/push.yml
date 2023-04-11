@@ -86,6 +86,7 @@ jobs:
 #          cp LICENSE_RELEASE.md source/Hexfile/LICENSE_RELEASE.md
 
       - name: Publish ${{ matrix.model }}_*.bin artifacts
+        uses: actions/upload-artifact@v3
 
 #      - name: Archive ${{ matrix.model }} artifacts
 #        uses: actions/upload-artifact@v3
