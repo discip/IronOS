@@ -80,21 +80,21 @@ jobs:
       - name: build ${{ matrix.model }}
         run: cd source && make -j$(nproc) model="${{ matrix.model }}" firmware-multi_compressed_European #firmware-multi_compressed_Bulgarian+Russian+Serbian+Ukrainian firmware-multi_Chinese+Japanese
 
-      - name: copy license text
-        run: |
-          cp LICENSE source/Hexfile/LICENSE
-          cp LICENSE_RELEASE.md source/Hexfile/LICENSE_RELEASE.md
+#      - name: copy license text
+#        run: |
+#          cp LICENSE source/Hexfile/LICENSE
+#          cp LICENSE_RELEASE.md source/Hexfile/LICENSE_RELEASE.md
 
       - name: Archive ${{ matrix.model }} artifacts
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.model }}_multi-lang
           path: |
-            source/Hexfile/${{ matrix.model }}_*.hex
-            source/Hexfile/${{ matrix.model }}_*.dfu
             source/Hexfile/${{ matrix.model }}_*.bin
-            source/Hexfile/LICENSE
-            source/Hexfile/LICENSE_RELEASE.md
+#            source/Hexfile/${{ matrix.model }}_*.hex
+#            source/Hexfile/${{ matrix.model }}_*.dfu
+#            source/Hexfile/LICENSE
+#            source/Hexfile/LICENSE_RELEASE.md
           if-no-files-found: error
 
       - name: Generate json index file
