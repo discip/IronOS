@@ -704,7 +704,7 @@ static bool setCalibrateVIN(void) {
       OLED::setCursor(40, 0);
       OLED::printNumber(getSettingValue(SettingsOptions::VoltageDiv), 3, FontStyle::LARGE);
 */      OLED::refresh();
-//      waitForButtonPressOrTimeout(1 * TICKS_SECOND);
+      waitForButtonPressOrTimeout(0.5 * TICKS_SECOND);
       return false;
     case BUTTON_NONE:
     default:
