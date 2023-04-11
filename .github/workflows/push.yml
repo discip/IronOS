@@ -85,15 +85,12 @@ jobs:
 #          cp LICENSE source/Hexfile/LICENSE
 #          cp LICENSE_RELEASE.md source/Hexfile/LICENSE_RELEASE.md
 
-      - name: Publish source/Hexfile/${{ matrix.model }}_*.bin artifacts
+      - name: Archive ${{ matrix.model }} artifacts
         uses: actions/upload-artifact@v3
-
-#      - name: Archive ${{ matrix.model }} artifacts
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: ${{ matrix.model }}_multi-lang
-#          path: |
-#            source/Hexfile/${{ matrix.model }}_*.bin
+        with:
+          name: ${{ matrix.model }}_multi-lang
+          path: |
+            source/Hexfile/${{ matrix.model }}_*.bin
 #            source/Hexfile/${{ matrix.model }}_*.hex
 #            source/Hexfile/${{ matrix.model }}_*.dfu
 #            source/Hexfile/LICENSE
