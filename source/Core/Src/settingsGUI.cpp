@@ -680,10 +680,10 @@ static bool setCalibrateVIN(void) {
 
   for (;;) {
     OLED::setCursor(25, 0);
-    uint16_t voltage = getInputVoltageX10((getSettingValue(SettingsOptions::VoltageDiv) / 4), 0);
-    OLED::printNumber(voltage / 40, 2, FontStyle::LARGE);
+    uint16_t voltage = getInputVoltageX10(getSettingValue(SettingsOptions::VoltageDiv), 0);
+    OLED::printNumber(voltage / 10, 2, FontStyle::LARGE);
     OLED::print(LargeSymbolDot, FontStyle::LARGE);
-    OLED::printNumber(voltage % 4, 2, FontStyle::LARGE, false);
+    OLED::printNumber(voltage % 10, 1, FontStyle::LARGE, false);
     OLED::print(LargeSymbolVolts, FontStyle::LARGE);
     
     OLED::setCursor(0, 8);
