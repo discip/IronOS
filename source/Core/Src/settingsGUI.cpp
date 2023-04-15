@@ -701,10 +701,10 @@ static bool setCalibrateVIN(void) {
     case BUTTON_B_LONG:
       saveSettings();
       OLED::clearScreen();
-//      OLED::setCursor(40, 0);
-//      OLED::printNumber(getSettingValue(SettingsOptions::VoltageDiv), 3, FontStyle::LARGE);
+      OLED::setCursor(0, 0);
+      warnUser(translatedString(Tr->CJCCalibrationDone), 3 * TICKS_SECOND);
       OLED::refresh();
-      waitForButtonPressOrTimeout(0.5 * TICKS_SECOND);
+//      waitForButtonPressOrTimeout(0.5 * TICKS_SECOND);
       return false;
     case BUTTON_NONE:
     default:
