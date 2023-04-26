@@ -100,7 +100,6 @@ static void displayPowerPulseWait(void);
 static bool showPowerPulseOptions(void);
 static void displayPowerPulseDuration(void);
 static void displayBrightnessLevel(void);
-static void displayInvertColor(void);
 static void displayLogoTime(void);
 
 #ifdef HALL_SENSOR
@@ -169,7 +168,6 @@ static bool enterAdvancedMenu(void);
  *  Animation Speed
  *  -Animation Loop
  *  OLED Brightness
- *  Invert Screen
  *  Logo Timeout
  *  Detailed IDLE
  *  Detailed Soldering
@@ -309,7 +307,6 @@ const menuitem UIMenu[] = {
      *  Animation Speed
      *  -Animation Loop
      *  OLED Brightness
-     *  Invert Screen
      *  Logo Timeout
      *  Detailed IDLE
      *  Detailed Soldering
@@ -328,7 +325,6 @@ const menuitem UIMenu[] = {
     {SETTINGS_DESC(SettingsItemIndex::AnimSpeed), nullptr, displayAnimationSpeed, nullptr, SettingsOptions::AnimationSpeed, SettingsItemIndex::AnimSpeed, 7}, /*Animation Speed adjustment */
     {SETTINGS_DESC(SettingsItemIndex::AnimLoop), nullptr, displayAnimationLoop, displayAnimationOptions, SettingsOptions::AnimationLoop, SettingsItemIndex::AnimLoop, 7}, /*Animation Loop switch */
     {SETTINGS_DESC(SettingsItemIndex::Brightness), nullptr, displayBrightnessLevel, nullptr, SettingsOptions::OLEDBrightness, SettingsItemIndex::Brightness, 6},          /*Brightness Level*/
-    {SETTINGS_DESC(SettingsItemIndex::ColourInversion), nullptr, displayInvertColor, nullptr, SettingsOptions::OLEDInversion, SettingsItemIndex::ColourInversion, 7},     /*Invert screen colour*/
     {SETTINGS_DESC(SettingsItemIndex::LOGOTime), nullptr, displayLogoTime, nullptr, SettingsOptions::LOGOTime, SettingsItemIndex::LOGOTime, 5},                           /*Set logo duration*/
     {SETTINGS_DESC(SettingsItemIndex::AdvancedIdle), nullptr, displayAdvancedIDLEScreens, nullptr, SettingsOptions::DetailedIDLE, SettingsItemIndex::AdvancedIdle, 7},    /*Advanced idle screen*/
     {SETTINGS_DESC(SettingsItemIndex::AdvancedSoldering), nullptr, displayAdvancedSolderingScreens, nullptr, SettingsOptions::DetailedSoldering, SettingsItemIndex::AdvancedSoldering,
@@ -746,13 +742,6 @@ static void displayBrightnessLevel(void) {
   OLED::printNumber((getSettingValue(SettingsOptions::OLEDBrightness) / BRIGHTNESS_STEP + 1), 2, FontStyle::LARGE);
   // While not optimal to apply this here, it is _very_ convienient
   OLED::setBrightness(getSettingValue(SettingsOptions::OLEDBrightness));
-}
-
-static void displayInvertColor(void) {
-
-  OLED::drawCheckbox(getSettingValue(SettingsOptions::OLEDInversion));
-  // While not optimal to apply this here, it is _very_ convienient
-  OLED::setInverseDisplay(getSettingValue(SettingsOptions::OLEDInversion));
 }
 
 static void displayLogoTime(void) {
