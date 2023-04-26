@@ -82,7 +82,6 @@ static bool showProfilePhase5Options(void);
 #endif
 
 static void displayAutomaticStartMode(void);
-static void displayLockingMode(void);
 static void displayCoolingBlinkEnabled(void);
 static bool setResetSettings(void);
 static void displayResetSettings(void);
@@ -137,7 +136,6 @@ static bool enterAdvancedMenu(void);
  *  Auto Start
  *  Temp Change Short Step
  *  Temp Change Long Step
- *  Locking Mode
  *  Profile Phases
  *  Profile Preheat Temperature
  *  Profile Preheat Max Temperature Change Per Second
@@ -239,7 +237,6 @@ const menuitem solderingMenu[] = {
      *  Auto Start
      *  Temp Change Short Step
      *  Temp Change Long Step
-     *  Locking Mode
      *  Profile Phases
      *  Profile Preheat Temperature
      *  Profile Preheat Max Temperature Change Per Second
@@ -263,7 +260,6 @@ const menuitem solderingMenu[] = {
      6}, /*Temp change short step*/
     {SETTINGS_DESC(SettingsItemIndex::TempChangeLongStep), nullptr, displayTempChangeLongStep, nullptr, SettingsOptions::TempChangeLongStep, SettingsItemIndex::TempChangeLongStep,
      6},                                                                                                                                                    /*Temp change long step*/
-    {SETTINGS_DESC(SettingsItemIndex::LockingMode), nullptr, displayLockingMode, nullptr, SettingsOptions::LockingMode, SettingsItemIndex::LockingMode, 7}, /*Locking Mode*/
 #ifdef PROFILE_SUPPORT
     {SETTINGS_DESC(SettingsItemIndex::ProfilePhases), nullptr, displayProfilePhases, nullptr, SettingsOptions::ProfilePhases, SettingsItemIndex::ProfilePhases, 7}, /*Profile Phases*/
     {SETTINGS_DESC(SettingsItemIndex::ProfilePreheatTemp), setProfilePreheatTemp, displayProfilePreheatTemp, showProfileOptions, SettingsOptions::SettingsOptionsLength, SettingsItemIndex::ProfilePreheatTemp,  5}, /*Profile Preheat Temp*/
@@ -521,24 +517,6 @@ static void displayAutomaticStartMode(void) {
 static void displayTempChangeShortStep(void) { OLED::printNumber(getSettingValue(SettingsOptions::TempChangeShortStep), 2, FontStyle::LARGE); }
 
 static void displayTempChangeLongStep(void) { OLED::printNumber(getSettingValue(SettingsOptions::TempChangeLongStep), 2, FontStyle::LARGE); }
-
-static void displayLockingMode(void) {
-
-  switch (getSettingValue(SettingsOptions::LockingMode)) {
-  case 0:
-    OLED::drawArea(OLED_WIDTH - 16 - 2, 0, 16, 16, UnavailableIcon);
-    break;
-  case 1:
-    OLED::print(translatedString(Tr->SettingLockBoostChar), FontStyle::LARGE);
-    break;
-  case 2:
-    OLED::print(translatedString(Tr->SettingLockFullChar), FontStyle::LARGE);
-    break;
-  default:
-    OLED::drawArea(OLED_WIDTH - 16 - 2, 0, 16, 16, UnavailableIcon);
-    break;
-  }
-}
 
 #ifdef PROFILE_SUPPORT
 
