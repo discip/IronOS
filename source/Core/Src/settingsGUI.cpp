@@ -641,7 +641,6 @@ static bool showProfilePhase5Options(void) { return getSettingValue(SettingsOpti
 #endif /* PROFILE_SUPPORT */
 
 static void displaySensitivity(void) {
-  
   if (getSettingValue(SettingsOptions::Sensitivity)) {
     OLED::printNumber(getSettingValue(SettingsOptions::Sensitivity), 1, FontStyle::LARGE, false);
   } else {
@@ -699,7 +698,6 @@ static void displayShutdownTime(void) {
 
 #ifdef HALL_SENSOR
 static void displayHallEffect(void) {
-  
   if (getSettingValue(SettingsOptions::HallEffectSensitivity)) {
     OLED::printNumber(getSettingValue(SettingsOptions::HallEffectSensitivity), 1, FontStyle::LARGE, false);
   } else {
@@ -871,7 +869,6 @@ static bool setCalibrateVIN(void) {
     OLED::print(LargeSymbolDot, FontStyle::LARGE);
     OLED::printNumber(voltage % 10, 1, FontStyle::LARGE, false);
     OLED::print(LargeSymbolVolts, FontStyle::LARGE);
-    
     OLED::setCursor(0, 8);
     OLED::printNumber(getSettingValue(SettingsOptions::VoltageDiv), 3, FontStyle::SMALL);
 
