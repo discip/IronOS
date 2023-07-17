@@ -18,9 +18,9 @@ void gui_solderingMode(uint8_t jumpToSleep) {
    * --> Long hold back button to exit
    * --> Double button to exit
    */
-  bool boostModeOn   = false;
-  bool converged     = false;
-  currentMode        = OperatingMode::soldering;
+  bool boostModeOn = false;
+  bool converged   = false;
+  currentMode      = OperatingMode::soldering;
 
   TickType_t buzzerEnd = 0;
 
@@ -36,17 +36,17 @@ void gui_solderingMode(uint8_t jumpToSleep) {
     case BUTTON_NONE:
       // stay
       boostModeOn = false;
-        currentMode = OperatingMode::soldering;
+      currentMode = OperatingMode::soldering;
       break;
     case BUTTON_BOTH:
     case BUTTON_B_LONG:
       return; // exit on back long hold
     case BUTTON_F_LONG:
       // if boost mode is enabled turn it on
-        if (getSettingValue(SettingsOptions::BoostTemp)) {
-          boostModeOn = true;
-          currentMode = OperatingMode::boost;
-        }
+      if (getSettingValue(SettingsOptions::BoostTemp)) {
+        boostModeOn = true;
+        currentMode = OperatingMode::boost;
+      }
       break;
     case BUTTON_F_SHORT:
     case BUTTON_B_SHORT: {
@@ -55,8 +55,7 @@ void gui_solderingMode(uint8_t jumpToSleep) {
       if (oldTemp != getSettingValue(SettingsOptions::SolderingTemp)) {
         saveSettings(); // only save on change
       }
-    }
-      break;
+    } break;
     default:
       break;
     }
