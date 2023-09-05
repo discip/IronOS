@@ -36,12 +36,14 @@ nav:
   - Startup Logo: Logo.md
   - Hardware:
       - Hall Sensor (Pinecil): HallSensor.md
+      - Bluetooth (Pinecil V2): Bluetooth.md
       - Hardware Notes: Hardware.md
       - Troubleshooting: Troubleshooting.md
       - Known Hardware Issues: HardwareIssues.md
       - Power sources: PowerSources.md
   - Translations: Translation.md
   - Development: Development.md
+  - Changelog: History.md
 
 # Plugins
 plugins:
