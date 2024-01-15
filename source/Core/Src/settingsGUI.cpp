@@ -250,7 +250,7 @@ const menuitem powerMenu[] = {
 #endif
 #ifdef POW_PD
   /* PD timeout setup */
-  {SETTINGS_DESC(SettingsItemIndex::PDNegTimeout), nullptr, displayPDNegTimeout, nullptr, SettingsOptions::PDNegTimeout, SettingsItemIndex::PDNegTimeout, 5},
+  {SETTINGS_DESC(SettingsItemIndex::PDNegTimeout), nullptr, displayPDNegTimeout, nullptr, SettingsOptions::PDNegTimeout, SettingsItemIndex::PDNegTimeout, 6},
   /* Toggle PPS & EPR */
   {SETTINGS_DESC(SettingsItemIndex::PDVpdo), nullptr, displayPDVpdo, nullptr, SettingsOptions::PDVpdo, SettingsItemIndex::PDVpdo, 7},
 #endif
@@ -384,7 +384,7 @@ const menuitem UIMenu[] = {
   /* Brightness Level */
   {SETTINGS_DESC(SettingsItemIndex::Brightness), nullptr, displayBrightnessLevel, nullptr, SettingsOptions::OLEDBrightness, SettingsItemIndex::Brightness, 7},
   /* Set logo duration */
-  {SETTINGS_DESC(SettingsItemIndex::LOGOTime), nullptr, displayLogoTime, nullptr, SettingsOptions::LOGOTime, SettingsItemIndex::LOGOTime, 5},
+  {SETTINGS_DESC(SettingsItemIndex::LOGOTime), nullptr, displayLogoTime, nullptr, SettingsOptions::LOGOTime, SettingsItemIndex::LOGOTime, 6},
   /* Advanced idle screen */
   {SETTINGS_DESC(SettingsItemIndex::AdvancedIdle), nullptr, displayAdvancedIDLEScreens, nullptr, SettingsOptions::DetailedIDLE, SettingsItemIndex::AdvancedIdle, 7},
   /* Advanced soldering screen */
@@ -520,7 +520,7 @@ static void displayPDNegTimeout(void) {
   if (value == 0) {
     OLED::drawArea(OLED_WIDTH - 16 - 2, 0, 16, 16, UnavailableIcon);
   } else {
-    OLED::printNumber(value, 3, FontStyle::LARGE);
+    OLED::printNumber(value, 2, FontStyle::LARGE);
   }
 }
 
@@ -827,7 +827,7 @@ static void displayLogoTime(void) {
     OLED::drawArea(OLED_WIDTH - 16 - 2, 0, 16, 16, RepeatInf);
     break;
   default:
-    OLED::printNumber(getSettingValue(SettingsOptions::LOGOTime), 2, FontStyle::LARGE);
+    OLED::printNumber(getSettingValue(SettingsOptions::LOGOTime), 1, FontStyle::LARGE);
     OLED::print(LargeSymbolSeconds, FontStyle::LARGE);
     break;
   }
