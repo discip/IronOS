@@ -1,10 +1,37 @@
 
 #include "OperatingModes.h"
 #include "SolderingCommon.h"
+// State 1 = button locking
+// State 2 = boost mode
+// State 3 = buzzer timer
 
-extern OperatingMode currentMode;
-
-void gui_solderingMode(uint8_t jumpToSleep) {
+OperatingMode handleSolderingButtons(const ButtonState buttons, guiContext *cxt) {
+  switch (buttons) {
+  case BUTTON_NONE:
+    cxt->scratch_state.state2 = 0;
+    break;
+  case BUTTON_BOTH:
+  /*Fall through*/
+  case BUTTON_B_LONG:
+    cxt->transitionMode = TransitionAnimation::Right;
+    return OperatingMode::HomeScreen;
+  case BUTTON_F_LONG:
+    // if boost mode is enabled turn it on
+    if (getSettingValue(SettingsOptions::BoostTemp)) {
+      cxt->scratch_state.state2 = 1;
+    }
+    break;
+  case BUTTON_F_SHORT:
+  case BUTTON_B_SHORT:
+    cxt->transitionMode = TransitionAnimation::Left;
+    return OperatingMode::TemperatureAdjust;
+    break;
+  default:
+    break;
+  }
+  return OperatingMode::Soldering;
+}
+OperatingMode gui_solderingMode(const ButtonState buttons, guiContext *cxt) {
   /*
    * * Soldering (gui_solderingMode)
    * -> Main loop where we draw temp, and animations
@@ -18,60 +45,58 @@ void gui_solderingMode(uint8_t jumpToSleep) {
    * --> Long hold back button to exit
    * --> Double button to exit
    */
-  bool boostModeOn = false;
-  bool converged   = false;
-  currentMode      = OperatingMode::soldering;
 
-  TickType_t buzzerEnd = 0;
-
-  if (jumpToSleep) {
-    if (gui_SolderingSleepingMode(jumpToSleep == 2, true) == 1) {
-      lastButtonTime = xTaskGetTickCount();
-      return; // If the function returns non-0 then exit
+  // Update the setpoints for the temperature
+  if (cxt->scratch_state.state2) {
+    if (getSettingValue(SettingsOptions::TemperatureInF)) {
+      currentTempTargetDegC = TipThermoModel::convertFtoC(getSettingValue(SettingsOptions::BoostTemp));
+    } else {
+      currentTempTargetDegC = (getSettingValue(SettingsOptions::BoostTemp));
+    }
+  } else {
+    if (getSettingValue(SettingsOptions::TemperatureInF)) {
+      currentTempTargetDegC = TipThermoModel::convertFtoC(getSettingValue(SettingsOptions::SolderingTemp));
+    } else {
+      currentTempTargetDegC = (getSettingValue(SettingsOptions::SolderingTemp));
     }
   }
-  for (;;) {
-    ButtonState buttons = getButtonState();
-    switch (buttons) {
-    case BUTTON_NONE:
-      // stay
-      boostModeOn = false;
-      currentMode = OperatingMode::soldering;
-      break;
-    case BUTTON_BOTH:
-    case BUTTON_B_LONG:
-      return; // exit on back long hold
-    case BUTTON_F_LONG:
-      // if boost mode is enabled turn it on
-      if (getSettingValue(SettingsOptions::BoostTemp)) {
-        boostModeOn = true;
-        currentMode = OperatingMode::boost;
-      }
-      break;
-    case BUTTON_F_SHORT:
-    case BUTTON_B_SHORT: {
-      uint16_t oldTemp = getSettingValue(SettingsOptions::SolderingTemp);
-      gui_solderingTempAdjust(); // goto adjust temp mode
-      if (oldTemp != getSettingValue(SettingsOptions::SolderingTemp)) {
-        saveSettings(); // only save on change
-      }
-    } break;
-    default:
-      break;
+
+  // Update status
+  int error = currentTempTargetDegC - TipThermoModel::getTipInC();
+  if (error >= -10 && error <= 10) {
+    // converged
+    if (!cxt->scratch_state.state5) {
+      setBuzzer(true);
+      cxt->scratch_state.state3 = xTaskGetTickCount() + TICKS_SECOND / 3;
+      cxt->scratch_state.state5 = true;
     }
-    // else we update the screen information
+    setStatusLED(LED_HOT);
+  } else {
+    setStatusLED(LED_HEATING);
+    cxt->scratch_state.state5 = false;
+  }
+  if (cxt->scratch_state.state3 != 0 && xTaskGetTickCount() >= cxt->scratch_state.state3) {
+    setBuzzer(false);
+  }
 
-    OLED::clearScreen();
-    // Draw in the screen details
-    if (getSettingValue(SettingsOptions::DetailedSoldering)) {
+  // Draw in the screen details
+  if (getSettingValue(SettingsOptions::DetailedSoldering)) {
+    if (OLED::getRotation()) {
+      OLED::setCursor(50, 0);
+    } else {
+      OLED::setCursor(-1, 0);
+    }
+
+    gui_drawTipTemp(true, FontStyle::LARGE);
+
+    if (cxt->scratch_state.state2) { // Boost mode is on
       if (OLED::getRotation()) {
-        OLED::setCursor(50, 0);
+        OLED::setCursor(34, 0);
       } else {
-        OLED::setCursor(-1, 0);
+        OLED::setCursor(50, 0);
       }
-
-      gui_drawTipTemp(true, FontStyle::LARGE);
-
+      OLED::print(LargeSymbolPlus, FontStyle::LARGE);
+    } else {
 #ifndef NO_SLEEP_MODE
       if (getSettingValue(SettingsOptions::Sensitivity) && getSettingValue(SettingsOptions::SleepTime)) {
         if (OLED::getRotation()) {
@@ -82,69 +107,43 @@ void gui_solderingMode(uint8_t jumpToSleep) {
         printCountdownUntilSleep(getSleepTimeout());
       }
 #endif
-
-      if (boostModeOn) {
-        if (OLED::getRotation()) {
-          OLED::setCursor(38, 8);
-        } else {
-          OLED::setCursor(55, 8);
-        }
-        OLED::print(SmallSymbolPlus, FontStyle::SMALL);
+      if (OLED::getRotation()) {
+        OLED::setCursor(32, 8);
       } else {
-        if (OLED::getRotation()) {
-          OLED::setCursor(32, 8);
-        } else {
-          OLED::setCursor(47, 8);
-        }
-        OLED::print(PowerSourceNames[getPowerSourceNumber()], FontStyle::SMALL, 2);
+        OLED::setCursor(47, 8);
       }
-
-      detailedPowerStatus();
-
-    } else {
-      basicSolderingStatus(boostModeOn);
+      OLED::print(PowerSourceNames[getPowerSourceNumber()], FontStyle::SMALL, 2);
     }
 
-    OLED::refresh();
-    // Update the setpoints for the temperature
-    if (boostModeOn) {
-      if (getSettingValue(SettingsOptions::TemperatureInF)) {
-        currentTempTargetDegC = TipThermoModel::convertFtoC(getSettingValue(SettingsOptions::BoostTemp));
-      } else {
-        currentTempTargetDegC = (getSettingValue(SettingsOptions::BoostTemp));
-      }
-    } else {
-      if (getSettingValue(SettingsOptions::TemperatureInF)) {
-        currentTempTargetDegC = TipThermoModel::convertFtoC(getSettingValue(SettingsOptions::SolderingTemp));
-      } else {
-        currentTempTargetDegC = (getSettingValue(SettingsOptions::SolderingTemp));
-      }
-    }
+    detailedPowerStatus();
 
-    if (checkExitSoldering()) {
-      setBuzzer(false);
-      return;
-    }
-
-    // Update status
-    int error = currentTempTargetDegC - TipThermoModel::getTipInC();
-    if (error >= -10 && error <= 10) {
-      // converged
-      if (!converged) {
-        setBuzzer(true);
-        buzzerEnd = xTaskGetTickCount() + TICKS_SECOND / 3;
-        converged = true;
-      }
-      setStatusLED(LED_HOT);
-    } else {
-      setStatusLED(LED_HEATING);
-      converged = false;
-    }
-    if (buzzerEnd != 0 && xTaskGetTickCount() >= buzzerEnd) {
-      setBuzzer(false);
-    }
-
-    // slow down ui update rate
-    GUIDelay();
+  } else {
+    basicSolderingStatus(cxt->scratch_state.state2);
   }
+  // Check if we should bail due to undervoltage for example
+  if (checkExitSoldering()) {
+    setBuzzer(false);
+    cxt->transitionMode = TransitionAnimation::Right;
+    return OperatingMode::HomeScreen;
+  }
+#ifdef NO_SLEEP_MODE
+
+  if (shouldShutdown()) {
+    // shutdown
+    currentTempTargetDegC = 0;
+    cxt->transitionMode   = TransitionAnimation::Right;
+    return OperatingMode::HomeScreen;
+  }
+#endif
+  if (shouldBeSleeping()) {
+    return OperatingMode::Sleeping;
+  }
+
+  if (heaterThermalRunaway) {
+    currentTempTargetDegC = 0; // heater control off
+    heaterThermalRunaway  = false;
+    cxt->transitionMode   = TransitionAnimation::Right;
+    return OperatingMode::ThermalRunaway;
+  }
+  return handleSolderingButtons(buttons, cxt);
 }
