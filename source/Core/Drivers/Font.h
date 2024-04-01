@@ -14,7 +14,7 @@
 #define FONT_12_WIDTH 12
 // THE MAIN FONTS ARE NO LONGER HERE, MOVED TO PYTHON AUTO GEN
 // THESE ARE ONLY THE SYMBOL FONTS
-
+// clang-format off
 const uint8_t ExtraFontChars[] = {
     // width = 12
     // height = 16
@@ -141,7 +141,7 @@ const uint8_t disconnectedTip[] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x37, 0x37, 0x00, 0x00, 0x00, 0x00, 0x00, 0x38, 0x04, 0x04, 0x02, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 #endif
 
-#if defined(MODEL_S60) > 0
+#if defined(MODEL_S60)+defined(MODEL_S60P) > 0
 const uint8_t buttonA[] = {
     // width = 42
     // height = 16
@@ -872,5 +872,6 @@ const uint8_t SettingsMenuIcons[][32 * 3] = {
     }
 #endif
 };
+// clang-format on
 
 #endif /* FONT_H_ */
