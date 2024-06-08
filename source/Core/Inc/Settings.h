@@ -11,7 +11,13 @@
 #define SETTINGS_H_
 #include <stdbool.h>
 #include <stdint.h>
-#define SETTINGSVERSION (0x2A) // This number is frozen, do not edit
+
+#ifdef MODEL_Pinecilv2
+// Required settings reset for PR #1916
+#define SETTINGSVERSION (0x55AB) // This number is frozen, do not edit
+#else
+#define SETTINGSVERSION (0x55AA) // This number is frozen, do not edit
+#endif
 
 enum SettingsOptions {
   SolderingTemp                  = 0,  // current set point for the iron
@@ -50,7 +56,7 @@ enum SettingsOptions {
   LOGOTime                       = 33, // Duration the logo will be displayed for
   CalibrateCJC                   = 34, // Toggle calibrate CJC at next boot
   BluetoothLE                    = 35, // Toggle BLE if present
-  PDVpdo                         = 36, // Toggle PPS & EPR
+  USBPDMode                      = 36, // Toggle PPS & EPR
   ProfilePhases                  = 37, // Number of profile mode phases
   ProfilePreheatTemp             = 38, // Temperature to preheat to before the first phase
   ProfilePreheatSpeed            = 49, // Maximum allowed preheat speed in degrees per second
