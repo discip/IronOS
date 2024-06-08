@@ -88,7 +88,7 @@ static const SettingConstants settingsConstants[(int)SettingsOptions::SettingsOp
     {                     0,                                 6,                 1,                            1}, // LOGOTime
     {                     0,                                 1,                 1,                            0}, // CalibrateCJC
     {                     0,                                 1,                 1,                            0}, // BluetoothLE
-    {                     0,                                 1,                 1,                            1}, // PDVpdo
+    {                     0,                                 2,                 1,                            1}, // USBPDMode
     {                     1,                                 5,                 1,                            4}, // ProfilePhases
     {            MIN_TEMP_C,                        MAX_TEMP_F,                 5,                           90}, // ProfilePreheatTemp
     {                     1,                                10,                 1,                            1}, // ProfilePreheatSpeed
@@ -134,9 +134,9 @@ bool sanitiseSettings() {
   // For all settings, need to ensure settings are in a valid range
   // First for any not know about due to array growth, reset them and update the length value
   bool dirty = false;
-  if (systemSettings.versionMarker != 0x55AA) {
+  if (systemSettings.versionMarker != SETTINGSVERSION) {
     memset((void *)&systemSettings, 0xFF, sizeof(systemSettings));
-    systemSettings.versionMarker = 0x55AA;
+    systemSettings.versionMarker = SETTINGSVERSION;
     dirty                        = true;
   }
   if (systemSettings.padding != 0xFFFFFFFF) {
