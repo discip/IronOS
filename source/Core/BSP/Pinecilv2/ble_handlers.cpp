@@ -263,9 +263,6 @@ int ble_char_write_setting_value_callback(struct bt_conn *conn, const struct bt_
     } else if (uuid_value < SettingsOptions::SettingsOptionsLength) {
       setSettingValue((SettingsOptions)(uuid_value), new_value);
       switch (uuid_value) {
-      case SettingsOptions::OLEDInversion:
-        OLED::setInverseDisplay(getSettingValue(SettingsOptions::OLEDInversion));
-        break;
       case SettingsOptions::OLEDBrightness:
         OLED::setBrightness(getSettingValue(SettingsOptions::OLEDBrightness));
         break;
