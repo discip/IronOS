@@ -32,6 +32,7 @@ OperatingMode handleSolderingButtons(const ButtonState buttons, guiContext *cxt)
   }
   return OperatingMode::Soldering;
 }
+
 OperatingMode gui_solderingMode(const ButtonState buttons, guiContext *cxt) {
   /*
    * * Soldering (gui_solderingMode)
