@@ -7,7 +7,7 @@
 // State 3 = buzzer timer
 
 OperatingMode handleSolderingButtons(const ButtonState buttons, guiContext *cxt) {
-  if (cxt->scratch_state.state1 > 1) {
+  if (cxt->scratch_state.state1 >= 2) {
     // Buttons are currently locked
     switch (buttons) {
     case BUTTON_F_LONG:
