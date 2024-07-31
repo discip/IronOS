@@ -7,7 +7,7 @@
 // State 3 = buzzer timer
 
 OperatingMode handleSolderingButtons(const ButtonState buttons, guiContext *cxt) {
-  if (cxt->scratch_state.state1 >= 2) {
+  if (cxt->scratch_state.state1 > 1) {
     // Buttons are currently locked
     switch (buttons) {
     case BUTTON_F_LONG:
@@ -18,12 +18,7 @@ OperatingMode handleSolderingButtons(const ButtonState buttons, guiContext *cxt)
     case BUTTON_BOTH_LONG:
       if (cxt->scratch_state.state1 == 3) {
         // Unlocking
-        if (warnUser(translatedString(Tr->UnlockingKeysString), buttons)) {
-          cxt->scratch_state.state1 = 1;
-        }
-      } else {
-        warnUser(translatedString(Tr->WarningKeysLockedString), buttons);
-        vTaskDelay(TICKS_100MS * 10);
+        cxt->scratch_state.state1 = 1;
       }
       break;
     case BUTTON_NONE:
@@ -31,6 +26,7 @@ OperatingMode handleSolderingButtons(const ButtonState buttons, guiContext *cxt)
       break;
     default: // Do nothing and display a lock warning
       warnUser(translatedString(Tr->WarningKeysLockedString), buttons);
+      vTaskDelay(TICKS_100MS * 10);
       break;
     }
     return OperatingMode::Soldering;
