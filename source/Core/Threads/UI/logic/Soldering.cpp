@@ -31,7 +31,6 @@ OperatingMode handleSolderingButtons(const ButtonState buttons, guiContext *cxt)
       break;
     default: // Do nothing and display a lock warning
       warnUser(translatedString(Tr->WarningKeysLockedString), buttons);
-      vTaskDelay(TICKS_100MS * 10);
       break;
     }
     return OperatingMode::Soldering;
