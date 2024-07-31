@@ -22,20 +22,16 @@ OperatingMode handleSolderingButtons(const ButtonState buttons, guiContext *cxt)
           cxt->scratch_state.state1 = 1;
         }
       } else {
-        if (warnUser(translatedString(Tr->WarningKeysLockedString), buttons)) {
-          warnUser(translatedString(Tr->WarningKeysLockedString), buttons);
-          vTaskDelay(TICKS_100MS * 10);
-        }
+        warnUser(translatedString(Tr->WarningKeysLockedString), buttons);
+        vTaskDelay(TICKS_100MS * 10);
       }
       break;
     case BUTTON_NONE:
       cxt->scratch_state.state1 = 3;
       break;
     default: // Do nothing and display a lock warning
-      if (warnUser(translatedString(Tr->WarningKeysLockedString), buttons)) {
-        warnUser(translatedString(Tr->WarningKeysLockedString), buttons);
-        vTaskDelay(TICKS_100MS * 10);
-      }
+      warnUser(translatedString(Tr->WarningKeysLockedString), buttons);
+      vTaskDelay(TICKS_100MS * 10);
       break;
     }
     return OperatingMode::Soldering;
@@ -67,8 +63,6 @@ OperatingMode handleSolderingButtons(const ButtonState buttons, guiContext *cxt)
       if (cxt->scratch_state.state1 == 0) {
         if (warnUser(translatedString(Tr->LockingKeysString), buttons)) {
           cxt->scratch_state.state1 = 2;
-          warnUser(translatedString(Tr->LockingKeysString), buttons);
-          vTaskDelay(TICKS_100MS * 10);
         }
       } else {
         // FIXME should be WarningKeysUnlockedString
