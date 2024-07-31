@@ -27,7 +27,7 @@ OperatingMode handleSolderingButtons(const ButtonState buttons, guiContext *cxt)
       cxt->scratch_state.state1 = 3;
       break;
     default: // Do nothing and display a lock warning
-      if ((buttons == BUTTON_F_SHORT) || (buttons == BUTTON_B_SHORT)) {
+      if ((cxt->scratch_state.state1 == 3) && (buttons == BUTTON_F_SHORT) || (buttons == BUTTON_B_SHORT)) {
         warnUser(translatedString(Tr->WarningKeysLockedString), buttons);
         vTaskDelay(TICKS_100MS * 10);
       }
