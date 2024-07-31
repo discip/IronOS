@@ -18,15 +18,19 @@ OperatingMode handleSolderingButtons(const ButtonState buttons, guiContext *cxt)
     case BUTTON_BOTH_LONG:
       if (cxt->scratch_state.state1 == 3) {
         // Unlocking
-        cxt->scratch_state.state1 = 1;
+        if (warnUser(translatedString(Tr->UnlockingKeysString), buttons)) {
+          cxt->scratch_state.state1 = 1;
+        }
       }
       break;
     case BUTTON_NONE:
       cxt->scratch_state.state1 = 3;
       break;
     default: // Do nothing and display a lock warning
-      warnUser(translatedString(Tr->WarningKeysLockedString), buttons);
-      vTaskDelay(TICKS_100MS * 10);
+      if ((buttons == BUTTON_F_SHORT) || (buttons == BUTTON_B_SHORT)) {
+        warnUser(translatedString(Tr->WarningKeysLockedString), buttons);
+        vTaskDelay(TICKS_100MS * 10);
+      }
       break;
     }
     return OperatingMode::Soldering;
