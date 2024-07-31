@@ -23,15 +23,21 @@ OperatingMode handleSolderingButtons(const ButtonState buttons, guiContext *cxt)
         }
       } else {
         warnUser(translatedString(Tr->WarningKeysLockedString), buttons);
-        vTaskDelay(TICKS_100MS * 10);
+        vTaskDelay(TICKS_100MS * 5);
       }
       break;
     case BUTTON_NONE:
       cxt->scratch_state.state1 = 3;
       break;
-    default: // Do nothing and display a lock warning
+    case BUTTON_F_SHORT:
       warnUser(translatedString(Tr->WarningKeysLockedString), buttons);
-      vTaskDelay(TICKS_100MS * 100);
+      vTaskDelay(TICKS_100MS * 10);
+      break;
+    case BUTTON_B_SHORT:
+      warnUser(translatedString(Tr->WarningKeysLockedString), buttons);
+      vTaskDelay(TICKS_100MS * 10);
+      break;
+    default: // Do nothing and display a lock warning
       break;
     }
     return OperatingMode::Soldering;
