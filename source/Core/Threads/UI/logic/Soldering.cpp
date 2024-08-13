@@ -9,7 +9,6 @@ OperatingMode handleSolderingButtons(const ButtonState buttons, guiContext *cxt)
   switch (buttons) {
   case BUTTON_NONE:
     cxt->scratch_state.state2 = 0;
-    cxt->scratch_state.state1 = 0;
     break;
   case BUTTON_BOTH:
   /*Fall through*/
