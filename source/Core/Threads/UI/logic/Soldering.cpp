@@ -2,7 +2,7 @@
 #include "OperatingModes.h"
 #include "SolderingCommon.h"
 #include "ui_drawing.hpp"
-// State 1 = button locking
+// State 1 = button locking  (0:unlocked+released, 1:unlocked, 2:locked, 3:locked+released)
 // State 2 = boost mode
 // State 3 = buzzer timer
 
@@ -10,6 +10,7 @@ OperatingMode handleSolderingButtons(const ButtonState buttons, guiContext *cxt)
   switch (buttons) {
   case BUTTON_NONE:
     cxt->scratch_state.state2 = 0;
+    cxt->scratch_state.state1 = 0;
     break;
   case BUTTON_BOTH:
   /*Fall through*/
