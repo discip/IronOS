@@ -72,8 +72,9 @@ enum SettingsOptions {
   ProfilePhase5Temp              = 59, // Temperature to target for the end of phase 5
   ProfilePhase5Duration          = 50, // Target duration for phase 5
   ProfileCooldownSpeed           = 51, // Maximum allowed cooldown speed in degrees per second
+  HallEffectSleepTime            = 52, // Seconds (/5) timeout to sleep when hall effect over threshold
   //
-  SettingsOptionsLength = 52, //
+  SettingsOptionsLength = 53, //
 };
 
 typedef enum {
