@@ -90,6 +90,36 @@ docs_history()
 	return "${ret}"
 }
 
+# Check for links to release builds in README.md
+docs_links()
+{
+	ver_git="$(git tag -l | sort | grep -e "^v" | grep -v "rc" | tail -1)"
+	md="README.md"
+	ver_md="$(grep -c "${ver_git}" "${md}")"
+	ret=0
+	if [ "${ver_md}" -ne 0 ]; then
+		ret=1
+		echo "Please, update mention & links in ${md} inside Builds section for release builds with version ${ver_git}."
+	fi;
+	return "${ret}"
+}
+
+# source/Makefile:ALL_LANGUAGES & Translations/*.json automagical routine
+build_langs()
+{
+	mk="../source/Makefile"
+	cd Translations/ || exit 1
+	langs="$(echo "$(find ./*.json | sed -ne 's,^\./translation_,,; s,\.json$,,; /[A-Z]/p' ; sed -ne 's/^ALL_LANGUAGES=//p;' "${mk}")" | sed 's, ,\n,g; s,\r,,g' | sort | uniq -u)"
+	ret=0
+	if [ -n "${langs}" ]; then
+		ret=1
+		echo "It seems there is mismatch between supported languages and enabled builds."
+		echo "Please, check files in Translations/ and ALL_LANGUAGES variable in source/Makefile for:"
+		echo "${langs}"
+	fi;
+	return "${ret}"
+}
+
 # Helper function to check code style using clang-format & grep/sed custom parsers:
 # - basic logic moved from source/Makefile : `check-style` target for better maintainance since a lot of sh script involved;
 # - output goes in gcc-like error compatible format for IDEs/editors.
@@ -173,7 +203,11 @@ if [ "docs" = "${cmd}" ]; then
 	readme="${?}"
 	docs_history
 	hist="${?}"
-	if [ "${readme}" -eq 0 ] && [ "${hist}" -eq 0 ]; then
+	build_langs
+	langs="${?}"
+	docs_links
+	links="${?}"
+	if [ "${readme}" -eq 0 ] && [ "${hist}" -eq 0 ] && [ "${langs}" -eq 0 ] && [ "${links}" -eq 0 ]; then
 		ret=0
 	else
 		ret=1
@@ -192,6 +226,16 @@ fi;
 
 if [ "docs_history" = "${cmd}" ]; then
 	docs_history
+	exit "${?}"
+fi;
+
+if [ "build_langs" = "${cmd}" ]; then
+	build_langs
+	exit "${?}"
+fi;
+
+if [ "docs_links" = "${cmd}" ]; then
+	docs_links
 	exit "${?}"
 fi;
 
