@@ -6,6 +6,7 @@
 // State 3 = buzzer timer
 
 OperatingMode handleSolderingButtons(const ButtonState buttons, guiContext *cxt) {
+  bool detailedView = getSettingValue(SettingsOptions::DetailedIDLE) && getSettingValue(SettingsOptions::DetailedSoldering);
   switch (buttons) {
   case BUTTON_NONE:
     cxt->scratch_state.state2 = 0;
