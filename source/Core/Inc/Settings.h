@@ -74,8 +74,9 @@ enum SettingsOptions {
   ProfileCooldownSpeed           = 50, // Maximum allowed cooldown speed in degrees per second
   HallEffectSleepTime            = 51, // Seconds (/5) timeout to sleep when hall effect over threshold
   SolderingTipType               = 52, // Selecting the type of soldering tip fitted
+  ReverseButtonSettings          = 53, // Change the A and B button assigment in Settings menu
   //
-  SettingsOptionsLength = 53, // End marker
+  SettingsOptionsLength = 54, // End marker
 };
 
 typedef enum {
