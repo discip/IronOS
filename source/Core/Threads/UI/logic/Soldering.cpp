@@ -6,6 +6,7 @@
 // State 3 = buzzer timer
 
 OperatingMode handleSolderingButtons(const ButtonState buttons, guiContext *cxt) {
+  bool detailedView = getSettingValue(SettingsOptions::DetailedIDLE) && getSettingValue(SettingsOptions::DetailedSoldering);
   switch (buttons) {
   case BUTTON_NONE:
     cxt->scratch_state.state2 = 0;
@@ -13,7 +14,7 @@ OperatingMode handleSolderingButtons(const ButtonState buttons, guiContext *cxt)
   case BUTTON_BOTH:
   /*Fall through*/
   case BUTTON_B_LONG:
-    cxt->transitionMode = TransitionAnimation::Right;
+    cxt->transitionMode = detailedView ? TransitionAnimation::None : TransitionAnimation::Right;
     return OperatingMode::HomeScreen;
   case BUTTON_F_LONG:
     // if boost mode is enabled turn it on
@@ -86,10 +87,12 @@ OperatingMode gui_solderingMode(const ButtonState buttons, guiContext *cxt) {
   } else {
     ui_draw_soldering_basic_status(cxt->scratch_state.state2);
   }
+
+  bool detailedView = getSettingValue(SettingsOptions::DetailedIDLE) && getSettingValue(SettingsOptions::DetailedSoldering);
   // Check if we should bail due to undervoltage for example
   if (checkExitSoldering()) {
     setBuzzer(false);
-    cxt->transitionMode = TransitionAnimation::Right;
+    cxt->transitionMode = detailedView ? TransitionAnimation::None : TransitionAnimation::Right;
     return OperatingMode::HomeScreen;
   }
 #ifdef NO_SLEEP_MODE
@@ -97,7 +100,7 @@ OperatingMode gui_solderingMode(const ButtonState buttons, guiContext *cxt) {
   if (shouldShutdown()) {
     // shutdown
     currentTempTargetDegC = 0;
-    cxt->transitionMode   = TransitionAnimation::Right;
+    cxt->transitionMode   = detailedView ? TransitionAnimation::None : TransitionAnimation::Right;
     return OperatingMode::HomeScreen;
   }
 #endif
@@ -105,10 +108,10 @@ OperatingMode gui_solderingMode(const ButtonState buttons, guiContext *cxt) {
     return OperatingMode::Sleeping;
   }
 
-  if (heaterThermalRunaway) {
-    currentTempTargetDegC = 0; // heater control off
-    heaterThermalRunaway  = false;
-    cxt->transitionMode   = TransitionAnimation::Right;
+  if (heaterThermalRunawayCounter > 8) {
+    currentTempTargetDegC       = 0; // heater control off
+    heaterThermalRunawayCounter = 0;
+    cxt->transitionMode         = TransitionAnimation::Right;
     return OperatingMode::ThermalRunaway;
   }
   return handleSolderingButtons(buttons, cxt);
