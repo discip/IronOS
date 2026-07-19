@@ -91,7 +91,6 @@ static bool showProfilePhase5Options(void);
 #endif /* PROFILE_SUPPORT */
 
 static void displayAutomaticStartMode(void);
-static void displayLockingMode(void);
 static void displayCoolingBlinkEnabled(void);
 static void setResetSettings(void);
 static void setCalibrate(void);
@@ -149,7 +148,6 @@ static void displayAdvancedMenu(void);
  *  Auto Start
  *  Temp Change Short Step
  *  Temp Change Long Step
- *  Locking Mode
  *  Profile Phases
  *  Profile Preheat Temperature
  *  Profile Preheat Max Temperature Change Per Second
@@ -274,7 +272,6 @@ const menuitem solderingMenu[] = {
    *  Auto Start
    *  Temp Change Short Step
    *  Temp Change Long Step
-   *  Locking Mode
    *  Tip Type
    *  Profile Phases
    *  Profile Preheat Temperature
@@ -299,8 +296,6 @@ const menuitem solderingMenu[] = {
   {SETTINGS_DESC(SettingsItemIndex::TempChangeShortStep), nullptr, displayTempChangeShortStep, nullptr, SettingsOptions::TempChangeShortStep, SettingsItemIndex::TempChangeShortStep, 6},
   /* Temp change long step */
   {SETTINGS_DESC(SettingsItemIndex::TempChangeLongStep), nullptr, displayTempChangeLongStep, nullptr, SettingsOptions::TempChangeLongStep, SettingsItemIndex::TempChangeLongStep, 6},
-  /* Locking Mode */
-  {SETTINGS_DESC(SettingsItemIndex::LockingMode), nullptr, displayLockingMode, nullptr, SettingsOptions::LockingMode, SettingsItemIndex::LockingMode, 7},
 #ifdef TIP_TYPE_SUPPORT
   /* Tip Type */
   {SETTINGS_DESC(SettingsItemIndex::SolderingTipType), nullptr, displaySolderingTipType, showSolderingTipType, SettingsOptions::SolderingTipType, SettingsItemIndex::SolderingTipType, 5},
@@ -631,23 +626,6 @@ static void displayAutomaticStartMode(void) {
 static void displayTempChangeShortStep(void) { OLED::printNumber(getSettingValue(SettingsOptions::TempChangeShortStep), 2, FontStyle::LARGE); }
 
 static void displayTempChangeLongStep(void) { OLED::printNumber(getSettingValue(SettingsOptions::TempChangeLongStep), 2, FontStyle::LARGE); }
-
-static void displayLockingMode(void) {
-  switch (getSettingValue(SettingsOptions::LockingMode)) {
-  case lockingMode_t::DISABLED:
-    OLED::drawUnavailableIcon();
-    break;
-  case lockingMode_t::BOOST:
-    OLED::print(translatedString(Tr->SettingLockBoostChar), FontStyle::LARGE);
-    break;
-  case lockingMode_t::FULL:
-    OLED::print(translatedString(Tr->SettingLockFullChar), FontStyle::LARGE);
-    break;
-  default:
-    OLED::drawUnavailableIcon();
-    break;
-  }
-}
 
 #ifdef PROFILE_SUPPORT
 

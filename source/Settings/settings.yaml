@@ -84,11 +84,6 @@ settings:
     max: 1
     min: 0
     name: DescriptionScrollSpeed
-  - default: LOCKING_MODE
-    increment: 1
-    max: 2
-    min: 0
-    name: LockingMode
   - default: POWER_PULSE_DEFAULT
     increment: 1
     max: 99

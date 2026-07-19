@@ -50,7 +50,6 @@ def process_default_values(
             1 if cfg and cfg.get("COOLING_BLINK", "enabled") == "enabled" else 0
         ),
         "ScrollingSpeed": lambda cfg: cfg.get("SCROLLSPEED", 0) if cfg else 0,
-        "LockingMode": lambda cfg: cfg.get("LOCK_MODE", 0) if cfg else 0,
         "MinVolCell": lambda cfg: cfg.get("VOLTAGE_MIN", 30) if cfg else 30,
         "QCIdleVoltage": lambda cfg: cfg.get("QC_VOLTAGE", 90) if cfg else 90,
         "PDNegTimeout": lambda cfg: cfg.get("PD_TIMEOUT", 5) if cfg else 5,
