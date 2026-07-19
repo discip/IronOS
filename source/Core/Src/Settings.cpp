@@ -26,34 +26,36 @@ bool sanitiseSettings();
 #define QC_VOLTAGE_MAX 140
 #endif /* POW_QC_20V */
 
-/*
- * This struct must be a multiple of 2 bytes as it is saved / restored from
- * flash in uint16_t chunks
- */
-typedef struct {
-  uint16_t versionMarker;
-  uint16_t length; // Length of valid bytes following
-  uint16_t settingsValues[SettingsOptionsLength];
-  // used to make this nicely "good enough" aligned to 32 bytes to make driver code trivial
-  uint32_t padding;
-
-} systemSettingsType;
-
-//~1024 is common programming size, setting threshold to be lower so we have warning
-static_assert(sizeof(systemSettingsType) < 512);
-
 // char (*__kaboom)[sizeof(systemSettingsType)] = 1; // Uncomment to print size at compile time
 volatile systemSettingsType systemSettings;
 
-// For every setting we need to store the min/max/increment values
-typedef struct {
-  const uint16_t min;          // Inclusive minimum value
-  const uint16_t max;          // Inclusive maximum value
-  const uint16_t increment;    // Standard increment
-  const uint16_t defaultValue; // Default vaue after reset
-} SettingConstants;
+#ifdef BLE_ENABLED
+static int16_t bleValueOnEntry = -1;
 
-static const SettingConstants settingsConstants[(int)SettingsOptions::SettingsOptionsLength] = {
+void setBluetoothLE(void) {
+  if (bleValueOnEntry < 0) {
+    bleValueOnEntry = getSettingValue(SettingsOptions::BluetoothLE);
+  }
+  nextSettingValue(SettingsOptions::BluetoothLE);
+}
+
+static void checkBLERebootNeeded(void) {
+  if (bleValueOnEntry < 0)
+    return;
+  uint16_t current = getSettingValue(SettingsOptions::BluetoothLE);
+  bool     wasOff  = (bleValueOnEntry == 0);
+  bool     isOff   = (current == 0);
+  bleValueOnEntry  = -1;
+  if (wasOff != isOff) {
+    while (getButtonA() || getButtonB()) {
+      // Wait for buttons to be released so the bootloader isn't entered
+    }
+    reboot();
+  }
+}
+#endif
+
+const SettingConstants settingsConstants[(int)SettingsOptions::SettingsOptionsLength] = {
     //{                 min,                                                                   max,         increment,                      default}
     {            MIN_TEMP_C,                                                            MAX_TEMP_F,                 5,               SOLDERING_TEMP}, // SolderingTemp
     {            MIN_TEMP_C,                                                            MAX_TEMP_F,                 5,                          150}, // SleepTemp
@@ -127,6 +129,9 @@ void saveSettings() {
   }
 
 #endif /* CANT_DIRECT_READ_SETTINGS */
+#ifdef BLE_ENABLED
+  checkBLERebootNeeded();
+#endif
 }
 
 bool loadSettings() {

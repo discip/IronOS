@@ -81,7 +81,9 @@
     "SettingStartSleepChar": "Ч",
     "SettingStartSleepOffChar": "Х",
     "SettingLockBoostChar": "Т",
-    "SettingLockFullChar": "П"
+    "SettingLockFullChar": "П",
+    "SettingBLEOnChar": "+",
+    "SettingBLEReadOnlyChar": "R"
   },
   "menuGroups": {
     "PowerMenu": {
@@ -119,10 +121,10 @@
       "displayText": "Аўта\n"
     },
     "TipTypeT12Long": {
-      "displayText": "TS100\nLong"
+      "displayText": "TS100\nстанд."
     },
     "TipTypeT12Short": {
-      "displayText": "Pine\nShort"
+      "displayText": "Pine\nкаротк."
     },
     "TipTypeT12PTS": {
       "displayText": "PTS\n200"
