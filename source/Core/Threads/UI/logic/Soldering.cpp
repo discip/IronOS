@@ -2,59 +2,14 @@
 #include "OperatingModes.h"
 #include "SolderingCommon.h"
 #include "ui_drawing.hpp"
-// State 1 = button locking  (0:unlocked+released, 1:unlocked, 2:locked, 3:locked+released)
 // State 2 = boost mode
 // State 3 = buzzer timer
 
 OperatingMode handleSolderingButtons(const ButtonState buttons, guiContext *cxt) {
-  if (cxt->scratch_state.state1 >= 2) {
-    // Buttons are currently locked
-    if (buttons == BUTTON_BOTH_LONG) {
-      if (cxt->scratch_state.state1 == 3) {
-        // Unlocking
-        if (warnUser(translatedString(Tr->UnlockingKeysString), buttons)) {
-          cxt->scratch_state.state1 = 1;
-          cxt->scratch_state.state7 = 0;
-        }
-      } else {
-        warnUser(translatedString(Tr->LockingKeysString), buttons);
-      }
-      return OperatingMode::Soldering;
-    }
-    if (cxt->scratch_state.state7 != 0) {
-      // show locked until timer is up
-      if (xTaskGetTickCount() >= cxt->scratch_state.state7) {
-        cxt->scratch_state.state7 = 0;
-      } else {
-        warnUser(translatedString(Tr->WarningKeysLockedString), buttons);
-        return OperatingMode::Soldering;
-      }
-    }
-    switch (buttons) {
-    case BUTTON_NONE:
-      cxt->scratch_state.state1 = 3;
-      cxt->scratch_state.state2 = 0;
-      break;
-    case BUTTON_F_LONG:
-      if (getSettingValue(SettingsOptions::BoostTemp) && (getSettingValue(SettingsOptions::LockingMode) == lockingMode_t::BOOST)) {
-        cxt->scratch_state.state2 = 1;
-        break;
-      }
-    /*Fall through*/
-    default: // Set timer for and display a lock warning
-      cxt->scratch_state.state7 = xTaskGetTickCount() + TICKS_SECOND;
-      warnUser(translatedString(Tr->WarningKeysLockedString), buttons);
-      break;
-    }
-    return OperatingMode::Soldering;
-  }
-
   bool detailedView = getSettingValue(SettingsOptions::DetailedIDLE) && getSettingValue(SettingsOptions::DetailedSoldering);
-  // otherwise we are unlocked
   switch (buttons) {
   case BUTTON_NONE:
     cxt->scratch_state.state2 = 0;
-    cxt->scratch_state.state1 = 0;
     break;
   case BUTTON_BOTH:
   /*Fall through*/
@@ -71,18 +26,6 @@ OperatingMode handleSolderingButtons(const ButtonState buttons, guiContext *cxt)
   case BUTTON_B_SHORT:
     cxt->transitionMode = TransitionAnimation::Left;
     return OperatingMode::TemperatureAdjust;
-  case BUTTON_BOTH_LONG:
-    if (getSettingValue(SettingsOptions::LockingMode)) {
-      // Lock buttons
-      if (cxt->scratch_state.state1 == 0) {
-        if (warnUser(translatedString(Tr->LockingKeysString), buttons)) {
-          cxt->scratch_state.state1 = 2;
-        }
-      } else {
-        // FIXME should be WarningKeysUnlockedString
-        warnUser(translatedString(Tr->UnlockingKeysString), buttons);
-      }
-    }
     break;
   default:
     break;
@@ -103,7 +46,6 @@ OperatingMode gui_solderingMode(const ButtonState buttons, guiContext *cxt) {
    * PID control
    * --> Long hold back button to exit
    * --> Double button to exit
-   * --> Long hold double button to toggle key lock
    */
 
   // Update the setpoints for the temperature

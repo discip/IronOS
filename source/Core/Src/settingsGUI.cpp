@@ -91,7 +91,6 @@ static bool showProfilePhase5Options(void);
 #endif /* PROFILE_SUPPORT */
 
 static void displayAutomaticStartMode(void);
-static void displayLockingMode(void);
 static void displayCoolingBlinkEnabled(void);
 static void setResetSettings(void);
 static void setCalibrate(void);
@@ -107,7 +106,6 @@ static void displayPowerPulseWait(void);
 static bool showPowerPulseOptions(void);
 static void displayPowerPulseDuration(void);
 static void displayBrightnessLevel(void);
-static void displayInvertColor(void);
 static void displayLogoTime(void);
 
 #ifdef HALL_SENSOR
@@ -149,7 +147,6 @@ static void displayAdvancedMenu(void);
  *  Auto Start
  *  Temp Change Short Step
  *  Temp Change Long Step
- *  Locking Mode
  *  Profile Phases
  *  Profile Preheat Temperature
  *  Profile Preheat Max Temperature Change Per Second
@@ -182,7 +179,6 @@ static void displayAdvancedMenu(void);
  *  Animation Speed
  *  -Animation Loop
  *  OLED Brightness
- *  Invert Screen
  *  Logo Timeout
  *  Detailed IDLE
  *  Detailed Soldering
@@ -274,7 +270,6 @@ const menuitem solderingMenu[] = {
    *  Auto Start
    *  Temp Change Short Step
    *  Temp Change Long Step
-   *  Locking Mode
    *  Tip Type
    *  Profile Phases
    *  Profile Preheat Temperature
@@ -299,8 +294,6 @@ const menuitem solderingMenu[] = {
   {SETTINGS_DESC(SettingsItemIndex::TempChangeShortStep), nullptr, displayTempChangeShortStep, nullptr, SettingsOptions::TempChangeShortStep, SettingsItemIndex::TempChangeShortStep, 6},
   /* Temp change long step */
   {SETTINGS_DESC(SettingsItemIndex::TempChangeLongStep), nullptr, displayTempChangeLongStep, nullptr, SettingsOptions::TempChangeLongStep, SettingsItemIndex::TempChangeLongStep, 6},
-  /* Locking Mode */
-  {SETTINGS_DESC(SettingsItemIndex::LockingMode), nullptr, displayLockingMode, nullptr, SettingsOptions::LockingMode, SettingsItemIndex::LockingMode, 7},
 #ifdef TIP_TYPE_SUPPORT
   /* Tip Type */
   {SETTINGS_DESC(SettingsItemIndex::SolderingTipType), nullptr, displaySolderingTipType, showSolderingTipType, SettingsOptions::SolderingTipType, SettingsItemIndex::SolderingTipType, 5},
@@ -379,7 +372,6 @@ const menuitem UIMenu[] = {
    *  Animation Speed
    *  -Animation Loop
    *  OLED Brightness
-   *  Invert Screen
    *  Logo Timeout
    *  Detailed IDLE
    *  Detailed Soldering
@@ -404,8 +396,6 @@ const menuitem UIMenu[] = {
   {SETTINGS_DESC(SettingsItemIndex::AnimLoop), nullptr, displayAnimationLoop, displayAnimationOptions, SettingsOptions::AnimationLoop, SettingsItemIndex::AnimLoop, 7},
   /* Brightness Level */
   {SETTINGS_DESC(SettingsItemIndex::Brightness), nullptr, displayBrightnessLevel, nullptr, SettingsOptions::OLEDBrightness, SettingsItemIndex::Brightness, 7},
-  /* Invert screen colour */
-  {SETTINGS_DESC(SettingsItemIndex::ColourInversion), nullptr, displayInvertColor, nullptr, SettingsOptions::OLEDInversion, SettingsItemIndex::ColourInversion, 7},
   /* Set logo duration */
   {SETTINGS_DESC(SettingsItemIndex::LOGOTime), nullptr, displayLogoTime, nullptr, SettingsOptions::LOGOTime, SettingsItemIndex::LOGOTime, 6},
   /* Advanced idle screen */
@@ -631,23 +621,6 @@ static void displayAutomaticStartMode(void) {
 static void displayTempChangeShortStep(void) { OLED::printNumber(getSettingValue(SettingsOptions::TempChangeShortStep), 2, FontStyle::LARGE); }
 
 static void displayTempChangeLongStep(void) { OLED::printNumber(getSettingValue(SettingsOptions::TempChangeLongStep), 2, FontStyle::LARGE); }
-
-static void displayLockingMode(void) {
-  switch (getSettingValue(SettingsOptions::LockingMode)) {
-  case lockingMode_t::DISABLED:
-    OLED::drawUnavailableIcon();
-    break;
-  case lockingMode_t::BOOST:
-    OLED::print(translatedString(Tr->SettingLockBoostChar), FontStyle::LARGE);
-    break;
-  case lockingMode_t::FULL:
-    OLED::print(translatedString(Tr->SettingLockFullChar), FontStyle::LARGE);
-    break;
-  default:
-    OLED::drawUnavailableIcon();
-    break;
-  }
-}
 
 #ifdef PROFILE_SUPPORT
 
@@ -931,12 +904,6 @@ static void displayBrightnessLevel(void) {
   OLED::printNumber((getSettingValue(SettingsOptions::OLEDBrightness) / BRIGHTNESS_STEP + 1), 1, FontStyle::LARGE);
   // While not optimal to apply this here, it is _very_ convenient
   OLED::setBrightness(getSettingValue(SettingsOptions::OLEDBrightness));
-}
-
-static void displayInvertColor(void) {
-  OLED::drawCheckbox(getSettingValue(SettingsOptions::OLEDInversion));
-  // While not optimal to apply this here, it is _very_ convenient
-  OLED::setInverseDisplay(getSettingValue(SettingsOptions::OLEDInversion));
 }
 
 static void displayLogoTime(void) {
