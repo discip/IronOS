@@ -71,6 +71,18 @@ MODEL_CONFIG: Dict[str, ModelConfig] = {
         flash_ranges=((0x08000000, 0x08100000),),
         ram_ranges=((0x20000000, 0x20005000),),
     ),
+    "S99": ModelConfig(
+        flash_total=59 * 1024,
+        ram_total=20 * 1024,
+        flash_ranges=((0x08000000, 0x08100000),),
+        ram_ranges=((0x20000000, 0x20005000),),
+    ),
+    "Si012ProMax": ModelConfig(
+        flash_total=59 * 1024,
+        ram_total=20 * 1024,
+        flash_ranges=((0x08000000, 0x08100000),),
+        ram_ranges=((0x20000000, 0x20005000),),
+    ),
     "S60P": ModelConfig(
         flash_total=78336,
         ram_total=20 * 1024,
@@ -104,6 +116,13 @@ MODEL_CONFIG: Dict[str, ModelConfig] = {
             (0x40010000, 0x40010E00),  # hbn_memory
             (0x22014000, 0x22017000),  # itcm_memory
         ),
+    ),
+    # FNIRSI HS-01 (CH571F)
+    "HS01": ModelConfig(
+        flash_total=188 * 1024,
+        ram_total=18 * 1024,
+        flash_ranges=((0x00000000, 0x0002F000),),
+        ram_ranges=((0x20003800, 0x20008000),),
     ),
 }
 
