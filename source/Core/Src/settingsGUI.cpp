@@ -97,7 +97,6 @@ static bool showProfilePhase5Options(void);
 #endif /* PROFILE_SUPPORT */
 
 static void displayAutomaticStartMode(void);
-static void displayLockingMode(void);
 static void displayCoolingBlinkEnabled(void);
 static void setResetSettings(void);
 static void setCalibrate(void);
@@ -106,6 +105,7 @@ static void displayCalibrate(void);
 static void setCalibrateVIN(void);
 static void displayTempChangeShortStep(void);
 static void displayTempChangeLongStep(void);
+static void displayLockingMode(void);
 static void displayPowerPulse(void);
 static bool displayAnimationOptions(void);
 static void displayAnimationSpeed(void);
@@ -114,7 +114,6 @@ static void displayPowerPulseWait(void);
 static bool showPowerPulseOptions(void);
 static void displayPowerPulseDuration(void);
 static void displayBrightnessLevel(void);
-static void displayInvertColor(void);
 static void displayLogoTime(void);
 
 #ifdef HALL_SENSOR
@@ -176,7 +175,6 @@ static void displayAdvancedMenu(void);
  *  Auto Start
  *  Temp Change Short Step
  *  Temp Change Long Step
- *  Locking Mode
  *  Profile Phases
  *  Profile Preheat Temperature
  *  Profile Preheat Max Temperature Change Per Second
@@ -209,7 +207,6 @@ static void displayAdvancedMenu(void);
  *  Animation Speed
  *  -Animation Loop
  *  OLED Brightness
- *  Invert Screen
  *  Logo Timeout
  *  Detailed IDLE
  *  Detailed Soldering
@@ -301,7 +298,6 @@ const menuitem solderingMenu[] = {
    *  Auto Start
    *  Temp Change Short Step
    *  Temp Change Long Step
-   *  Locking Mode
    *  Tip Type
    *  Profile Phases
    *  Profile Preheat Temperature
@@ -406,7 +402,6 @@ const menuitem UIMenu[] = {
    *  Animation Speed
    *  -Animation Loop
    *  OLED Brightness
-   *  Invert Screen
    *  Logo Timeout
    *  Detailed IDLE
    *  Detailed Soldering
@@ -439,8 +434,6 @@ const menuitem UIMenu[] = {
   {SETTINGS_DESC(SettingsItemIndex::AnimLoop), nullptr, displayAnimationLoop, displayAnimationOptions, SettingsOptions::AnimationLoop, SettingsItemIndex::AnimLoop, 7},
   /* Brightness Level */
   {SETTINGS_DESC(SettingsItemIndex::Brightness), nullptr, displayBrightnessLevel, nullptr, SettingsOptions::OLEDBrightness, SettingsItemIndex::Brightness, 7},
-  /* Invert screen colour */
-  {SETTINGS_DESC(SettingsItemIndex::ColourInversion), nullptr, displayInvertColor, nullptr, SettingsOptions::OLEDInversion, SettingsItemIndex::ColourInversion, 7},
   /* Set logo duration */
   {SETTINGS_DESC(SettingsItemIndex::LOGOTime), nullptr, displayLogoTime, nullptr, SettingsOptions::LOGOTime, SettingsItemIndex::LOGOTime, 6},
   /* Advanced idle screen */
@@ -983,12 +976,6 @@ static void displayBrightnessLevel(void) {
   OLED::printNumber((getSettingValue(SettingsOptions::OLEDBrightness) / BRIGHTNESS_STEP + 1), 1, VALUE_FONT);
   // While not optimal to apply this here, it is _very_ convenient
   OLED::setBrightness(getSettingValue(SettingsOptions::OLEDBrightness));
-}
-
-static void displayInvertColor(void) {
-  OLED::drawCheckbox(getSettingValue(SettingsOptions::OLEDInversion));
-  // While not optimal to apply this here, it is _very_ convenient
-  OLED::setInverseDisplay(getSettingValue(SettingsOptions::OLEDInversion));
 }
 
 static void displayLogoTime(void) {
