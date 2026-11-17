@@ -39,45 +39,50 @@ enum SettingsOptions {
   DetailedSoldering              = 14, // Detailed soldering screens
   TemperatureInF                 = 15, // Should the temp be in F or C (true is F)
   DescriptionScrollSpeed         = 16, // Description scroll speed
-  KeepAwakePulse                 = 17, // Keep Awake pulse power in 0.1 watts (10 = 1Watt)
-  KeepAwakePulseWait             = 18, // Time between Keep Awake pulses in 2500 ms = 2.5 s increments
-  KeepAwakePulseDuration         = 19, // Duration of the Keep Awake pusle in 250 ms increments
-  VoltageDiv                     = 20, // Voltage divisor factor
-  BoostTemp                      = 21, // Boost mode set point for the iron
-  CalibrationOffset              = 22, // This stores the temperature offset for this tip in the iron.
-  PowerLimit                     = 23, // Maximum power iron allowed to output
-  ReverseButtonTempChangeEnabled = 24, // Change the plus and minus button assigment
-  TempChangeLongStep             = 25, // Temperature-change-increment on long button press
-  TempChangeShortStep            = 26, // Temperature-change-increment on short button press
-  HallEffectSensitivity          = 27, // Operating mode of the hall effect sensor
-  AccelMissingWarningCounter     = 28, // Counter of how many times we have warned we cannot detect the accelerometer
-  PDMissingWarningCounter        = 29, // Counter of how many times we have warned we cannot detect the pd interface
-  UILanguage                     = 30, // Selected UI Language code, null-terminated *only if* the length is less than 8 chars
-  PDNegTimeout                   = 31, // PD timeout in 100ms steps
-  OLEDBrightness                 = 32, // Brightness for the OLED display
-  LOGOTime                       = 33, // Duration the logo will be displayed for
-  CalibrateCJC                   = 34, // Toggle calibrate CJC at next boot
-  BluetoothLE                    = 35, // Toggle BLE if present
-  USBPDMode                      = 36, // Toggle PPS & EPR
-  ProfilePhases                  = 37, // Number of profile mode phases
-  ProfilePreheatTemp             = 38, // Temperature to preheat to before the first phase
-  ProfilePreheatSpeed            = 49, // Maximum allowed preheat speed in degrees per second
-  ProfilePhase1Temp              = 40, // Temperature to target for the end of phase 1
-  ProfilePhase1Duration          = 41, // Target duration for phase 1
-  ProfilePhase2Temp              = 42, // Temperature to target for the end of phase 2
-  ProfilePhase2Duration          = 43, // Target duration for phase 2
-  ProfilePhase3Temp              = 44, // Temperature to target for the end of phase 3
-  ProfilePhase3Duration          = 45, // Target duration for phase 3
-  ProfilePhase4Temp              = 46, // Temperature to target for the end of phase 4
-  ProfilePhase4Duration          = 47, // Target duration for phase 4
-  ProfilePhase5Temp              = 48, // Temperature to target for the end of phase 5
-  ProfilePhase5Duration          = 59, // Target duration for phase 5
-  ProfileCooldownSpeed           = 50, // Maximum allowed cooldown speed in degrees per second
-  HallEffectSleepTime            = 51, // Seconds (/5) timeout to sleep when hall effect over threshold
-  SolderingTipType               = 52, // Selecting the type of soldering tip fitted
-  ReverseButtonSettings          = 53, // Change the A and B button assigment in Settings menu
+  LockingMode                    = 17, // Store the locking mode
+  KeepAwakePulse                 = 18, // Keep Awake pulse power in 0.1 watts (10 = 1Watt)
+  KeepAwakePulseWait             = 19, // Time between Keep Awake pulses in 2500 ms = 2.5 s increments
+  KeepAwakePulseDuration         = 20, // Duration of the Keep Awake pusle in 250 ms increments
+  VoltageDiv                     = 21, // Voltage divisor factor
+  BoostTemp                      = 22, // Boost mode set point for the iron
+  CalibrationOffset              = 23, // This stores the temperature offset for this tip in the iron.
+  PowerLimit                     = 24, // Maximum power iron allowed to output
+  ReverseButtonTempChangeEnabled = 25, // Change the plus and minus button assigment
+  TempChangeLongStep             = 26, // Temperature-change-increment on long button press
+  TempChangeShortStep            = 27, // Temperature-change-increment on short button press
+  HallEffectSensitivity          = 28, // Operating mode of the hall effect sensor
+  AccelMissingWarningCounter     = 29, // Counter of how many times we have warned we cannot detect the accelerometer
+  PDMissingWarningCounter        = 30, // Counter of how many times we have warned we cannot detect the pd interface
+  UILanguage                     = 31, // Selected UI Language code, null-terminated *only if* the length is less than 8 chars
+  PDNegTimeout                   = 32, // PD timeout in 100ms steps
+  OLEDInversion                  = 33, // Invert the colours on the display
+  OLEDBrightness                 = 34, // Brightness for the OLED display
+  LOGOTime                       = 35, // Duration the logo will be displayed for
+  CalibrateCJC                   = 36, // Toggle calibrate CJC at next boot
+  BluetoothLE                    = 37, // Toggle BLE if present
+  USBPDMode                      = 38, // Toggle PPS & EPR
+  ProfilePhases                  = 39, // Number of profile mode phases
+  ProfilePreheatTemp             = 40, // Temperature to preheat to before the first phase
+  ProfilePreheatSpeed            = 41, // Maximum allowed preheat speed in degrees per second
+  ProfilePhase1Temp              = 42, // Temperature to target for the end of phase 1
+  ProfilePhase1Duration          = 43, // Target duration for phase 1
+  ProfilePhase2Temp              = 44, // Temperature to target for the end of phase 2
+  ProfilePhase2Duration          = 45, // Target duration for phase 2
+  ProfilePhase3Temp              = 46, // Temperature to target for the end of phase 3
+  ProfilePhase3Duration          = 47, // Target duration for phase 3
+  ProfilePhase4Temp              = 48, // Temperature to target for the end of phase 4
+  ProfilePhase4Duration          = 49, // Target duration for phase 4
+  ProfilePhase5Temp              = 50, // Temperature to target for the end of phase 5
+  ProfilePhase5Duration          = 51, // Target duration for phase 5
+  ProfileCooldownSpeed           = 52, // Maximum allowed cooldown speed in degrees per second
+  HallEffectSleepTime            = 53, // Seconds (/5) timeout to sleep when hall effect over threshold
+  SolderingTipType               = 54, // Selecting the type of soldering tip fitted
+  ReverseButtonSettings          = 55, // Change the A and B button assigment in Settings menu
+  BuzzerEnabled                  = 56, // Buzzer on/off (devices with a buzzer)
+  LEDMode                        = 57, // Status LED mode
+  CalibrationOffset2             = 58, // Calibration offset for the second tip socket
   //
-  SettingsOptionsLength = 54, // End marker
+  SettingsOptionsLength = 59, // End marker
 };
 
 // For every setting we need to store the min/max/increment values
@@ -155,13 +160,17 @@ typedef enum {
   T12_6_2_OHM, // Short Tips manufactured by Pine64
   T12_4_OHM,   // Longer tip but low resistance for PTS200
 #endif
-  // #ifdef TIPTYPE_TS80
-  //   TS80_4_5_OHM, // TS80(P) default tips
-  // // We do not know of other tuning tips (?yet?)
-  // #endif
-  // #ifdef TIPTYPE_JBC
-  //   JBC_210_2_5_OHM, // Small JBC tips as used in the S60/S60P
-  // #endif
+// #ifdef TIPTYPE_TS80
+//   TS80_4_5_OHM, // TS80(P) default tips
+// // We do not know of other tuning tips (?yet?)
+// #endif
+// #ifdef TIPTYPE_JBC
+//   JBC_210_2_5_OHM, // Small JBC tips as used in the S60/S60P
+// #endif
+#ifdef TIPTYPE_C245
+  C245_5_5_OHM, // Sequre stock 5.5 ohm cartridge (S99 default)
+  C245_2_5_OHM, // JBC (or clone) 2.5 ohm C245 style cartridge
+#endif
   TIP_TYPE_MAX, // Max value marker
 } tipType_t;
 #else
@@ -200,4 +209,4 @@ void setBluetoothLE(void);
 #endif /* BLE_ENABLED */
 #endif // c++ guard
 
-#endif                       /* SETTINGS_H_ */
+#endif /* SETTINGS_H_ */
